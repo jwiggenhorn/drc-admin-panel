@@ -1,37 +1,55 @@
-import Tutorial from '../components/tutorial'
+import { useState } from 'react'
+import Link from 'next/link'
 import useStudies from '../hooks/use-studies'
 import { post } from '../lib/utils'
 
 export default function Home() {
-  const { studies, isLoading, isError } = useStudies('Dr. Coan')
+  const user = 'Dr. Coan'
+  const { studies, isLoading, isError, updateStudies } = useStudies(user)
+  const [studyName, setStudyName] = useState('')
 
-  return (
-    <div>
-      {isLoading && 'Loading...'}
-      {isError && 'ERROR!'}
+  async function handleCreateStudy() {
+    await post('/api/studies', {
+      name: studyName,
+      admin: user,
+    })
+    await updateStudies()
+    setStudyName('')
+  }
 
-      <br />
+  if (isLoading) return <h1>Loading</h1>
+  else
+    return (
+      <div>
+        <h1>{user}'s Studies</h1>
+        {studies?.map((study) => (
+          <div key={study._id} style={{ border: '1px solid black' }}>
+            <h3>Study: {study.name}</h3>
+            <h3>Key: {study.key}</h3>
+          </div>
+        ))}
+        {studies?.length === 0 && <p>No studies found.</p>}
 
-      {studies?.map((study) => (
-        <div key={study._id}>
-          <h1>Study: {study.name}</h1>
-          <h2>Key: {study.key}</h2>
-        </div>
-      ))}
+        <label>
+          Study name:
+          <input
+            type="text"
+            value={studyName}
+            onChange={(e) => setStudyName(e.target.value)}
+          />
+        </label>
+        <br />
+        <button onClick={handleCreateStudy}>Create study</button>
 
-      <button
-        onClick={() =>
-          post('/api/study', {
-            name: 'Test Study',
-            admin: 'Dr. Coan',
-            key: 'test key',
-          })
-        }
-      >
-        Test POST
-      </button>
+        {isError && <h1 style={{ color: 'red' }}>Something went wrong!!</h1>}
 
-      <Tutorial />
-    </div>
-  )
+        <br />
+        <br />
+        <br />
+
+        <Link href="/tutorial">
+          <button>Go to Next.js Tutorial Page</button>
+        </Link>
+      </div>
+    )
 }

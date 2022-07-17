@@ -1,4 +1,5 @@
 import dbConnect from '../../../lib/db-connect'
+import { generateKey } from '../../../lib/utils'
 import Study from '../../../models/study'
 
 export default async function handler(req, res) {
@@ -16,7 +17,8 @@ export default async function handler(req, res) {
       break
     case 'POST':
       try {
-        const study = await Study.create(req.body)
+        // TODO: make sure generated key doesn't already exist in DB
+        const study = await Study.create({ ...req.body, key: generateKey() })
         res.status(201).json({ data: study })
       } catch (error) {
         res.status(400).send()
