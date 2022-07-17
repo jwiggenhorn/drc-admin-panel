@@ -3,18 +3,16 @@ import mongoose from 'mongoose'
 const StudySchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Please provide a name for this study.'],
-    maxlength: [60, 'Name cannot be more than 60 characters.'],
+    required: true,
   },
   admin: {
     type: String,
-    required: [true, "Please provide the admin's name."],
-    maxlength: [60, "Admin's name cannot be more than 60 characters."],
+    required: true,
   },
   key: {
     type: String,
-    required: [true, 'Study must have key.'],
-    maxlength: [5, 'Study key cannot be more than 5 characters.'],
+    required: true,
+    maxlength: 5,
   },
 })
 
