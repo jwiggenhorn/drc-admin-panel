@@ -1,6 +1,6 @@
-import dbConnect from '../../../lib/db-connect'
-import { generateKey } from '../../../lib/utils'
-import Study from '../../../models/study'
+import dbConnect from '@lib/db-connect'
+import { generateKey } from '@lib/utils'
+import Study from '@models/study'
 
 export default async function handler(req, res) {
   await dbConnect()

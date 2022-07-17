@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
-import useStudies from '../hooks/use-studies'
-import { post } from '../lib/utils'
+import useStudies from '@hooks/use-studies'
+import { post } from '@lib/utils'
 
 export default function Home() {
   const user = 'Dr. Coan'

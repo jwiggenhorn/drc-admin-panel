@@ -1,5 +1,5 @@
-import dbConnect from '../../../lib/db-connect'
-import Study from '../../../models/study'
+import dbConnect from '@lib/db-connect'
+import Study from '@models/study'
 
 export default async function handler(req, res) {
   await dbConnect()
