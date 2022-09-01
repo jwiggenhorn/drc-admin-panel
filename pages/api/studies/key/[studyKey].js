@@ -1,7 +1,9 @@
+import { useCors } from '@lib/cors'
 import dbConnect from '@lib/db-connect'
 import Study from '@models/study'
 
 export default async function handler(req, res) {
+  await useCors(req, res)
   await dbConnect()
 
   const { studyKey } = req.query
