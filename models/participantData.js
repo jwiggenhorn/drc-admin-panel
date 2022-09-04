@@ -1,8 +1,6 @@
 import mongoose from 'mongoose'
-const ObjectId = require('mongodb').ObjectId
 
 const ParticipantDataSchema = new mongoose.Schema({
-  StudyId: ObjectId,
   HorizSliderInputs: [[Number, Number]],
   VertSliderInputs: [[Number, Number]],
   ButtonOneInputs: [[Number, Boolean]],

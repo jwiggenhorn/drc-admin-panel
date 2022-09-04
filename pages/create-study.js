@@ -23,9 +23,6 @@ export default function CreateStudy() {
   return (
     <div>
       <br />
-      <br />
-      <br />
-
       <label>
         Title:
         <input

@@ -8,6 +8,7 @@ export default function useStudy(id) {
 
   return {
     study: data?.study,
+    participantData: data?.data,
     isLoading: !error && !data,
     isError: error,
   }

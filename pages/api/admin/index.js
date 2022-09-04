@@ -4,7 +4,6 @@ import jwt_decode from 'jwt-decode'
 
 export default async function handler(req, res) {
   await dbConnect()
-
   const user = jwt_decode(req.headers.authorization)
 
   try {

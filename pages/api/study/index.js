@@ -6,7 +6,6 @@ import jwt_decode from 'jwt-decode'
 
 export default async function handler(req, res) {
   await dbConnect()
-
   const user = jwt_decode(req.headers.authorization)
 
   switch (req.method) {
@@ -16,9 +15,8 @@ export default async function handler(req, res) {
         const { id } = req.query
         const study = await Study.findOne({ _id: id })
         console.log(`Fetching participant data for study with id ${id}`)
-        const data = await ParticipantData.find({ _id: id })
-        study.data = data
-        res.status(200).json({ study })
+        const data = await ParticipantData.find({ _id: study.data })
+        res.status(200).json({ study, data })
       } catch (error) {
         res.status(400).send()
       }
