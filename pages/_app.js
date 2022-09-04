@@ -1,14 +1,22 @@
-import '@styles/globals.css'
 import { SWRConfig } from 'swr'
+import '@styles/globals.css'
+import Layout from '@components/layout'
 
 function MyApp({ Component, pageProps }) {
   return (
     <SWRConfig
       value={{
-        fetcher: (...args) => fetch(...args).then((res) => res.json()),
+        fetcher: (url, token) =>
+          fetch(url, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }).then((res) => res.json()),
       }}
     >
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </SWRConfig>
   )
 }
