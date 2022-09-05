@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Button, Box, AppBar, Toolbar } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home'
 import AddIcon from '@mui/icons-material/Add'
-import Login from 'pages/components/login-btn.js'
+import Login from '@components/login.js'
 
 export default function Navbar() {
   return (
@@ -21,7 +21,7 @@ export default function Navbar() {
               </Button>
             </Link>
           </span>
-          <Login/>
+          <Login />
         </Toolbar>
       </AppBar>
     </Box>

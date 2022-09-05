@@ -7,9 +7,11 @@ import {
 } from '@mui/material'
 import { Box } from '@mui/system'
 import useAdmin from '@hooks/use-admin'
+import { useSession } from 'next-auth/react'
 
 export default function Home() {
   const { studies, isLoading, isError } = useAdmin()
+  const {} = useSession({ required: true })
 
   if (isLoading)
     return (

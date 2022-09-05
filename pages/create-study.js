@@ -3,6 +3,7 @@ import { post } from '@lib/utils'
 import useAuth from '@hooks/use-auth'
 import { useRouter } from 'next/router'
 import { Button, TextField } from '@mui/material'
+import { useSession } from 'next-auth/react'
 
 export default function CreateStudy() {
   const [title, setTitle] = useState('')
@@ -11,6 +12,7 @@ export default function CreateStudy() {
   const [inputProfile, setInputProfile] = useState(0)
   const { jwt } = useAuth()
   const router = useRouter()
+  const {} = useSession({ required: true })
 
   async function handleCreateStudy() {
     await post('/api/study', jwt, {
