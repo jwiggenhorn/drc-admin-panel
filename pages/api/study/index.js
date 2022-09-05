@@ -17,10 +17,10 @@ export default async function handler(req, res) {
         const study = await Study.findOne({ _id: id })
 
         if (!study) {
-          res.status(404).send()
+          return res.status(404).send()
         }
         if (study.author != user.name) {
-          res.status(401).send()
+          return res.status(401).send()
         }
         console.log(`Fetching participant data for study with id ${id}`)
         const data = await ParticipantData.find({ _id: study.data })

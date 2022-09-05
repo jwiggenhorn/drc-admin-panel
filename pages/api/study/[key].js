@@ -15,9 +15,10 @@ export default async function handler(req, res) {
       // This endpoint is used by the mobile app to load
       // a study's song and input profile (control configuration).
       try {
-        // TODO: only return song and inputProfile
         const study = await Study.findOne({ key })
-        res.status(200).json(study)
+        res
+          .status(200)
+          .json((({ song, inputProfile }) => ({ song, inputProfile }))(study))
       } catch (error) {
         res.status(400).send()
       }
@@ -27,7 +28,10 @@ export default async function handler(req, res) {
       // This endpoint is used by the mobile app to submit
       // participant data to be added to an existing study.
       try {
-        // TODO: block request if over participant limit
+        const study = await Study.findOne({ key })
+        if (study.data.length >= study.participantLimit) {
+          return res.status(403).send()
+        }
         console.log(`Adding participant data for study with key ${key}...`)
         const data = await ParticipantData.create({ ...req.body })
         await Study.findOneAndUpdate({ key }, { $push: { data: data._id } })
