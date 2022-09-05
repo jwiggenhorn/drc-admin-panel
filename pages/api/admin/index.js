@@ -6,8 +6,10 @@ export default async function handler(req, res) {
   await dbConnect()
   const user = jwt_decode(req.headers.authorization)
 
+  // GET /admin
+  // This endpoint returns a list of Study objects
+  // owned by the caller (indicated in token).
   try {
-    // GET /admin
     console.log(`Fetching studies for user ${user.name}...`)
     const studies = await Study.find({ author: user.name })
     res.status(200).json(studies)

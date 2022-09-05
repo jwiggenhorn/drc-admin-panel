@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { post } from '@lib/utils'
 import useAuth from '@hooks/use-auth'
 import { useRouter } from 'next/router'
+import { Button, TextField } from '@mui/material'
 
 export default function CreateStudy() {
   const [title, setTitle] = useState('')
@@ -16,50 +17,57 @@ export default function CreateStudy() {
       title,
       description,
       participantLimit,
+      inputProfile,
     })
     router.push('/')
   }
 
   return (
     <div>
+      <TextField
+        id="outlined-basic"
+        label="Title"
+        variant="outlined"
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        multiline
+        fullWidth
+        sx={{ mb: 3 }}
+      />
+      <TextField
+        id="outlined-basic"
+        label="Description"
+        variant="outlined"
+        type="text"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        multiline
+        fullWidth
+        sx={{ mb: 3 }}
+      />
+      <TextField
+        id="outlined-basic"
+        label="Max number of participants"
+        variant="outlined"
+        type="number"
+        value={participantLimit}
+        onChange={(e) => setParticipantLimit(e.target.value)}
+        sx={{ mr: 3 }}
+      />
+      <TextField
+        id="outlined-basic"
+        label="Input profile"
+        variant="outlined"
+        type="number"
+        value={inputProfile}
+        onChange={(e) => setInputProfile(e.target.value)}
+        sx={{ mb: 4 }}
+      />
       <br />
-      <label>
-        Title:
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Description:
-        <input
-          type="text"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Number of participants:
-        <input
-          type="number"
-          value={participantLimit}
-          onChange={(e) => setParticipantLimit(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Input profile:
-        <input
-          type="number"
-          value={inputProfile}
-          onChange={(e) => setInputProfile(e.target.value)}
-        />
-      </label>
-      <br />
-      <button onClick={handleCreateStudy}>Create study</button>
+      <Button variant="contained" onClick={handleCreateStudy}>
+        Create study
+      </Button>
     </div>
   )
 }

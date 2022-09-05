@@ -11,9 +11,17 @@ export default async function handler(req, res) {
   switch (req.method) {
     case 'GET':
       // GET /study
+      // Endpoint to return participant data regarding 1 study.
       try {
         const { id } = req.query
         const study = await Study.findOne({ _id: id })
+
+        if (!study) {
+          res.status(404).send()
+        }
+        if (study.author != user.name) {
+          res.status(401).send()
+        }
         console.log(`Fetching participant data for study with id ${id}`)
         const data = await ParticipantData.find({ _id: study.data })
         res.status(200).json({ study, data })
@@ -23,12 +31,18 @@ export default async function handler(req, res) {
       break
     case 'POST':
       // POST /study
+      // Endpoint for creating studies via the admin panel.
+      // Note: study author will be decoded from user JWT.
       try {
         console.log(`Creating new study for user ${user.name}...`)
-        // TODO: make sure generated key doesn't already exist in DB
+        // Make sure generated key doesn't already exist in DB
+        let key = generateKey()
+        while (await Study.findOne({ key })) {
+          key = generateKey()
+        }
         const study = await Study.create({
           ...req.body,
-          key: generateKey(),
+          key,
           author: user.name,
         })
         res.status(201).json({ data: study })

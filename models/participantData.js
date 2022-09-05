@@ -1,15 +1,17 @@
 import mongoose from 'mongoose'
 
 const ParticipantDataSchema = new mongoose.Schema({
-  HorizSliderInputs: [[Number, Number]],
-  VertSliderInputs: [[Number, Number]],
-  ButtonOneInputs: [[Number, Boolean]],
-  ButtonTwoInputs: [[Number, Boolean]],
-  ButtonThreeInputs: [[Number, Boolean]],
-  ToggleOneInputs: [[Number, Boolean]],
-  ToggleTwoInputs: [[Number, Boolean]],
-  ToggleThreeInputs: [[Number, Boolean]],
-  JoystickInputs: [[Number, [Number, Number]]],
+  HorizSliderInputs: [{ millisecondsElapsed: Number, state: Number }],
+  VertSliderInputs: [{ millisecondsElapsed: Number, state: Number }],
+  ButtonOneInputs: [{ millisecondsElapsed: Number, state: Boolean }],
+  ButtonTwoInputs: [{ millisecondsElapsed: Number, state: Boolean }],
+  ButtonThreeInputs: [{ millisecondsElapsed: Number, state: Boolean }],
+  ToggleOneInputs: [{ millisecondsElapsed: Number, state: Boolean }],
+  ToggleTwoInputs: [{ millisecondsElapsed: Number, state: Boolean }],
+  ToggleThreeInputs: [{ millisecondsElapsed: Number, state: Boolean }],
+  JoystickInputs: [
+    { millisecondsElapsed: Number, state: { x: Number, y: Number } },
+  ],
 })
 
 export default mongoose.models.ParticipantData ||

@@ -3,7 +3,6 @@ import dbConnect from '@lib/db-connect'
 import ParticipantData from '@models/participantData'
 import Study from '@models/study'
 
-// endpoints for mobile app
 export default async function handler(req, res) {
   await useCors(req, res)
   await dbConnect()
@@ -13,7 +12,10 @@ export default async function handler(req, res) {
   switch (req.method) {
     case 'GET':
       // GET /study/[key]
+      // This endpoint is used by the mobile app to load
+      // a study's song and input profile (control configuration).
       try {
+        // TODO: only return song and inputProfile
         const study = await Study.findOne({ key })
         res.status(200).json(study)
       } catch (error) {
@@ -22,6 +24,8 @@ export default async function handler(req, res) {
       break
     case 'POST':
       // POST /study/[key]
+      // This endpoint is used by the mobile app to submit
+      // participant data to be added to an existing study.
       try {
         // TODO: block request if over participant limit
         console.log(`Adding participant data for study with key ${key}...`)
