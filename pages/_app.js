@@ -8,12 +8,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     <SessionProvider session={session}>
       <SWRConfig
         value={{
-          fetcher: (url, token) =>
-            fetch(url, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }).then((res) => res.json()),
+          fetcher: (...args) => fetch(...args).then((res) => res.json()),
         }}
       >
         <Layout>

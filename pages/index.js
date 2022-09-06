@@ -4,14 +4,13 @@ import {
   ListItemButton,
   ListItemText,
   CircularProgress,
+  Alert,
 } from '@mui/material'
 import { Box } from '@mui/system'
 import useAdmin from '@hooks/use-admin'
-import { useSession } from 'next-auth/react'
 
 export default function Home() {
   const { studies, isLoading, isError } = useAdmin()
-  const {} = useSession({ required: true })
 
   if (isLoading)
     return (
@@ -39,7 +38,7 @@ export default function Home() {
         ))}
         {studies?.length === 0 && <p>No studies found.</p>}
 
-        {isError && <h1 style={{ color: 'red' }}>Something went wrong!!</h1>}
+        {isError && <Alert severity="error">Error fetching studies</Alert>}
       </div>
     )
 }

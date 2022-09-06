@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import useStudy from '@hooks/use-study'
 import { post } from '@lib/utils'
-import { Button, CircularProgress } from '@mui/material'
+import { Button, CircularProgress, Alert } from '@mui/material'
 import { Box } from '@mui/system'
 
 export default function Home() {
@@ -19,7 +19,7 @@ export default function Home() {
     return (
       <div>
         <h2>{study?.title}</h2>
-        <p>Description: {study?.description}</p>
+        {study?.description && <p>Description: {study?.description}</p>}
         <h3>Key: {study?.key}</h3>
         <h3>Participant Limit: {study?.participantLimit}</h3>
         <h3>Input profile: {study?.inputProfile}</h3>
@@ -37,7 +37,7 @@ export default function Home() {
           generate test data
         </Button>
 
-        {isError && <h1 style={{ color: 'red' }}>Something went wrong!!</h1>}
+        {isError && <Alert severity="error">Error fetching study data</Alert>}
       </div>
     )
 }

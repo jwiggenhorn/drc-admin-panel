@@ -1,25 +1,28 @@
+import { getToken } from 'next-auth/jwt'
 import dbConnect from '@lib/db-connect'
 import { generateKey } from '@lib/utils'
 import Study from '@models/study'
 import ParticipantData from '@models/participantData'
-import jwt_decode from 'jwt-decode'
 
 export default async function handler(req, res) {
   await dbConnect()
-  const user = jwt_decode(req.headers.authorization)
+  const token = await getToken({ req })
 
   switch (req.method) {
     case 'GET':
       // GET /study
       // Endpoint to return participant data regarding 1 study.
       try {
+        if (!token) {
+          return res.status(401).send()
+        }
         const { id } = req.query
         const study = await Study.findOne({ _id: id })
 
         if (!study) {
           return res.status(404).send()
         }
-        if (study.author != user.name) {
+        if (study.author != token.email) {
           return res.status(401).send()
         }
         console.log(`Fetching participant data for study with id ${id}`)
@@ -34,7 +37,10 @@ export default async function handler(req, res) {
       // Endpoint for creating studies via the admin panel.
       // Note: study author will be decoded from user JWT.
       try {
-        console.log(`Creating new study for user ${user.name}...`)
+        if (!token) {
+          return res.status(401).send()
+        }
+        console.log(`Creating new study for user ${token.email}...`)
         // Make sure generated key doesn't already exist in DB
         let key = generateKey()
         while (await Study.findOne({ key })) {
@@ -43,7 +49,7 @@ export default async function handler(req, res) {
         const study = await Study.create({
           ...req.body,
           key,
-          author: user.name,
+          author: token.email,
         })
         res.status(201).json({ data: study })
       } catch (error) {

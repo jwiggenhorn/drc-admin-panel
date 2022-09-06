@@ -1,10 +1,8 @@
 import useSWR from 'swr'
-import useAuth from './use-auth'
 
 export default function useStudy(id) {
   const endpoint = `/api/study?id=${id}`
-  const { jwt } = useAuth()
-  const { data, error } = useSWR([endpoint, jwt])
+  const { data, error } = useSWR(endpoint)
 
   return {
     study: data?.study,
