@@ -1,7 +1,7 @@
 import useSWR, { useSWRConfig } from 'swr'
 
-export default function useAdmin() {
-  const endpoint = '/api/admin'
+export default function useStudies() {
+  const endpoint = '/api/studies'
 
   const { data, error } = useSWR(endpoint)
   const { mutate } = useSWRConfig()

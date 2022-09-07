@@ -31,7 +31,7 @@ export default function Home() {
         <Button
           variant="outlined"
           onClick={() => {
-            post(`http://localhost:3000/api/study/${study?.key}`, '')
+            post(`http://localhost:3000/api/study/data`, { key: study?.key })
           }}
         >
           generate test data

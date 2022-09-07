@@ -7,10 +7,10 @@ import {
   Alert,
 } from '@mui/material'
 import { Box } from '@mui/system'
-import useAdmin from '@hooks/use-admin'
+import useStudies from '@hooks/use-studies'
 
 export default function Home() {
-  const { studies, isLoading, isError } = useAdmin()
+  const { studies, isLoading, isError } = useStudies()
 
   if (isLoading)
     return (

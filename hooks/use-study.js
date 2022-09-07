@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 
 export default function useStudy(id) {
-  const endpoint = `/api/study?id=${id}`
+  const endpoint = `/api/study/${id}`
   const { data, error } = useSWR(endpoint)
 
   return {
