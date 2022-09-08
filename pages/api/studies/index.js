@@ -1,31 +1,22 @@
+import { getToken } from 'next-auth/jwt'
 import dbConnect from '@lib/db-connect'
-import { generateKey } from '@lib/utils'
 import Study from '@models/study'
 
+// GET /studies
+// This endpoint returns a list of Study objects
+// owned by the caller (indicated in token).
 export default async function handler(req, res) {
   await dbConnect()
+  const token = await getToken({ req })
+  if (!token) {
+    return res.status(401).send()
+  }
 
-  switch (req.method) {
-    case 'GET':
-      // this endpoint will likely be removed in the future
-      try {
-        const studies = await Study.find()
-        res.status(200).json({ data: studies })
-      } catch (error) {
-        res.status(400).send()
-      }
-      break
-    case 'POST':
-      try {
-        // TODO: make sure generated key doesn't already exist in DB
-        const study = await Study.create({ ...req.body, key: generateKey() })
-        res.status(201).json({ data: study })
-      } catch (error) {
-        res.status(400).send()
-      }
-      break
-    default:
-      res.status(405).send()
-      break
+  try {
+    console.log(`Fetching studies for user ${token.email}...`)
+    const studies = await Study.find({ author: token.email })
+    res.status(200).json(studies)
+  } catch (error) {
+    res.status(400).send()
   }
 }

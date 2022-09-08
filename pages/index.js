@@ -1,55 +1,44 @@
-import { useState } from 'react'
 import Link from 'next/link'
+import {
+  Divider,
+  ListItemButton,
+  ListItemText,
+  CircularProgress,
+  Alert,
+} from '@mui/material'
+import { Box } from '@mui/system'
 import useStudies from '@hooks/use-studies'
-import { post } from '@lib/utils'
 
 export default function Home() {
-  const user = 'Dr. Coan'
-  const { studies, isLoading, isError, updateStudies } = useStudies(user)
-  const [studyName, setStudyName] = useState('')
+  const { studies, isLoading, isError } = useStudies()
 
-  async function handleCreateStudy() {
-    await post('/api/studies', {
-      name: studyName,
-      admin: user,
-    })
-    await updateStudies()
-    setStudyName('')
-  }
-
-  if (isLoading) return <h1>Loading</h1>
+  if (isLoading)
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', pt: 6 }}>
+        <CircularProgress size={350} thickness={2.5} />
+      </Box>
+    )
   else
     return (
       <div>
-        <h1>{user}'s Studies</h1>
+        <h1>Studies</h1>
+        <Divider />
         {studies?.map((study) => (
-          <div key={study._id} style={{ border: '1px solid black' }}>
-            <h3>Study: {study.name}</h3>
-            <h3>Key: {study.key}</h3>
-          </div>
+          <Link
+            href={{
+              pathname: '/study/[id]',
+              query: { id: study._id },
+            }}
+            key={study._id}
+          >
+            <ListItemButton divider>
+              <ListItemText primary={study.title} />
+            </ListItemButton>
+          </Link>
         ))}
         {studies?.length === 0 && <p>No studies found.</p>}
 
-        <label>
-          Study name:
-          <input
-            type="text"
-            value={studyName}
-            onChange={(e) => setStudyName(e.target.value)}
-          />
-        </label>
-        <br />
-        <button onClick={handleCreateStudy}>Create study</button>
-
-        {isError && <h1 style={{ color: 'red' }}>Something went wrong!!</h1>}
-
-        <br />
-        <br />
-        <br />
-
-        <Link href="/tutorial">
-          <button>Go to Next.js Tutorial Page</button>
-        </Link>
+        {isError && <Alert severity="error">Error fetching studies</Alert>}
       </div>
     )
 }

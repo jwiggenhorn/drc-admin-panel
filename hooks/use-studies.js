@@ -1,7 +1,8 @@
 import useSWR, { useSWRConfig } from 'swr'
 
-export default function useStudies(adminName) {
-  const endpoint = `/api/studies/${adminName ?? ''}`
+export default function useStudies() {
+  const endpoint = '/api/studies'
+
   const { data, error } = useSWR(endpoint)
   const { mutate } = useSWRConfig()
 
@@ -9,6 +10,6 @@ export default function useStudies(adminName) {
     studies: data,
     isLoading: !error && !data,
     isError: error,
-    updateStudies: () => mutate(endpoint),
+    updateAdmin: () => mutate(endpoint),
   }
 }
