@@ -5,7 +5,7 @@ import Study from '@models/study'
 
 // POST /study
 // Endpoint for creating studies via the admin panel.
-// Note: study author will be decoded from user JWT.
+// Study author is decoded from user JWT.
 export default async function handler(req, res) {
   await dbConnect()
   const token = await getToken({ req })
