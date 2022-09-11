@@ -62,7 +62,7 @@ export default function CreateStudy() {
         error={!isValidParticipantLimit}
         helperText={isValidParticipantLimit ? '' : 'Must be between 1 and 500'}
       />
-      <FormControl>
+      <FormControl style={{minWidth: 120}}>
         <InputLabel id="outlined-basic">Input Profile</InputLabel>
         <Select
           labelId="outlined-basic-label"
