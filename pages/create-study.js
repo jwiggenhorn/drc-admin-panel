@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { Button, Select, TextField } from '@mui/material'
 import { InputLabel } from '@mui/material';
 import { FormControl } from '@mui/material';
+import { MenuItem } from '@mui/material';
 
 export default function CreateStudy() {
   const [title, setTitle] = useState('')
@@ -68,30 +69,33 @@ export default function CreateStudy() {
           labelId="outlined-basic-label"
           id="outlined-basic"
           type="number"
+          defaultValue={0}
           value={inputProfile}
           label="Input Profile"
-          onChange={(e) => setParticipantLimit(e.target.value)}
+          onChange={(e) => setInputProfile(e.target.value)}
           sx={{ mb: 4 }}
           inputProps={{ min: 0, max: 16 }}
           error={!isValidInputProfile}
           helperText={isValidInputProfile ? '' : 'Must be between 0 and 16'}
         >
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-          <option value={5}>5</option>
-          <option value={6}>6</option>
-          <option value={7}>7</option>
-          <option value={8}>8</option>
-          <option value={9}>9</option>
-          <option value={10}>10</option>
-          <option value={11}>11</option>
-          <option value={12}>12</option>
-          <option value={13}>13</option>
-          <option value={14}>14</option>
-          <option value={15}>15</option>
-          <option value={16}>16</option>
+         
+          <MenuItem value={0}>0</MenuItem>
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={4}>4</MenuItem>
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={6}>6</MenuItem>
+          <MenuItem value={7}>7</MenuItem>
+          <MenuItem value={8}>8</MenuItem>
+          <MenuItem value={9}>9</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={11}>11</MenuItem>
+          <MenuItem value={12}>12</MenuItem>
+          <MenuItem value={13}>13</MenuItem>
+          <MenuItem value={14}>14</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
+          <MenuItem value={16}>16</MenuItem>
         </Select>
       </FormControl>
       <br />
