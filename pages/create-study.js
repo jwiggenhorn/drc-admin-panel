@@ -78,7 +78,6 @@ export default function CreateStudy() {
           error={!isValidInputProfile}
           helperText={isValidInputProfile ? '' : 'Must be between 0 and 16'}
         >
-         
           <MenuItem value={0}>0</MenuItem>
           <MenuItem value={1}>1</MenuItem>
           <MenuItem value={2}>2</MenuItem>
