@@ -2,7 +2,7 @@ import { useCors } from '@lib/cors'
 import dbConnect from '@lib/db-connect'
 import Study from '@models/study'
 
-// GET /study/data/[key]
+// GET /study/config/[key]
 // This endpoint is used by the mobile app to load
 // a study's song and input profile (control configuration).
 export default async function handler(req, res) {
