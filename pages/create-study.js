@@ -1,8 +1,14 @@
 import { useState } from 'react'
 import { post } from '@lib/utils'
 import { useRouter } from 'next/router'
-import { Button, Select, TextField } from '@mui/material'
-import { InputLabel, FormControl, MenuItem } from '@mui/material'
+import {
+  Button,
+  Select,
+  TextField,
+  InputLabel,
+  FormControl,
+  MenuItem,
+} from '@mui/material'
 
 export default function CreateStudy() {
   const [title, setTitle] = useState('')
@@ -12,7 +18,6 @@ export default function CreateStudy() {
   const router = useRouter()
   const isValidParticipantLimit =
     participantLimit >= 1 && participantLimit <= 500
-  const isValidInputProfile = inputProfile >= 0
   const isValid = title && isValidParticipantLimit
 
   async function handleCreateStudy() {
@@ -64,7 +69,6 @@ export default function CreateStudy() {
       <FormControl style={{ minWidth: 120 }}>
         <InputLabel>Input Profile</InputLabel>
         <Select
-          type="number"
           value={inputProfile}
           label="Input Profile"
           onChange={(e) => setInputProfile(e.target.value)}
