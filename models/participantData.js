@@ -9,9 +9,7 @@ const ParticipantDataSchema = new mongoose.Schema({
   ToggleOneInputs: [{ millisecondsElapsed: Number, state: Boolean }],
   ToggleTwoInputs: [{ millisecondsElapsed: Number, state: Boolean }],
   ToggleThreeInputs: [{ millisecondsElapsed: Number, state: Boolean }],
-  JoystickInputs: [
-    { millisecondsElapsed: Number, state: { x: Number, y: Number } },
-  ],
+  JoystickInputs: [{ millisecondsElapsed: Number, state: Number}],
 })
 
 export default mongoose.models.ParticipantData ||
