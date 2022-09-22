@@ -11,16 +11,40 @@ export default async function handler(req, res) {
   await dbConnect()
 
   try {
-    const { key } = req.body
+    const { key, ...participantData } = req.body
     const study = await Study.findOne({ key })
     if (study.data.length >= study.participantLimit) {
       return res.status(403).send()
     }
+    interpolateData(participantData)
     console.log(`Adding participant data for study with key ${key}...`)
-    const data = await ParticipantData.create({ ...req.body })
+    const data = await ParticipantData.create(participantData)
     await Study.findOneAndUpdate({ key }, { $push: { data: data._id } })
     res.status(201).json()
   } catch (error) {
     res.status(400).send()
+  }
+}
+
+function interpolateData(participantData) {
+  for (const inputType in participantData) {
+    const dataPoints = participantData[inputType]
+    if (dataPoints.length == 0) continue
+
+    dataPoints.forEach((dataPoint) => {
+      dataPoint.timestamp = Math.round(dataPoint.timestamp / 10) * 10
+    })
+    const finalTimestamp = dataPoints[dataPoints.length - 1].timestamp
+
+    const interpolatedDataPoints = []
+    let currentVal = 0
+    for (let i = 0; i <= finalTimestamp; i += 10) {
+      const pointAtTime = dataPoints.find(
+        (dataPoint) => dataPoint.timestamp == i
+      )
+      if (pointAtTime) currentVal = pointAtTime.value
+      interpolatedDataPoints.push({ timestamp: i, value: currentVal })
+    }
+    participantData[inputType] = interpolatedDataPoints
   }
 }
