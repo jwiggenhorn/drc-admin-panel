@@ -16,6 +16,7 @@ export default async function handler(req, res) {
     if (study.data.length >= study.participantLimit) {
       return res.status(403).send()
     }
+    convertJoystickData(participantData)
     interpolateData(participantData, stopTime)
     console.log(`Adding participant data for study with key ${key}...`)
     const data = await ParticipantData.create(participantData)
@@ -24,6 +25,24 @@ export default async function handler(req, res) {
   } catch (error) {
     res.status(400).send()
   }
+}
+
+function convertJoystickData(participantData) {
+  const joystickData = participantData.joystickInputs
+  if (joystickData.length == 0) return
+
+  participantData.joystickInputs = joystickData.map((dataPoint) => {
+    if (dataPoint.value != undefined) return dataPoint
+    const radians = Math.atan2(dataPoint.y, dataPoint.x) - Math.PI / 2
+
+    let degrees = ((radians * 180) / Math.PI) * -1
+    if (degrees < 0) degrees += 360.0
+
+    let value = Math.round((degrees * 2) / 60)
+    if (value == 0) value = 12
+
+    return { timestamp: dataPoint.timestamp, value }
+  })
 }
 
 function interpolateData(participantData, stopTime) {
