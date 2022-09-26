@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import useStudy from '@hooks/use-study'
-import { post } from '@lib/utils'
+import { inputProfileNames, post } from '@lib/utils'
 import { Button, CircularProgress, Alert } from '@mui/material'
 import { Box } from '@mui/system'
 
@@ -22,7 +22,7 @@ export default function Home() {
         {study?.description && <p>Description: {study?.description}</p>}
         <h3>Key: {study?.key}</h3>
         <h3>Participant Limit: {study?.participantLimit}</h3>
-        <h3>Input profile: {study?.inputProfile}</h3>
+        <h3>Input profile: {inputProfileNames.get(study?.inputProfile)}</h3>
         <h3>Data:</h3>
         {participantData?.map((data) => (
           <p key={data._id}>{JSON.stringify(data)}</p>
