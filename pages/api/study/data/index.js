@@ -57,9 +57,9 @@ function interpolateData(participantData, stopTime) {
     const interpolatedDataPoints = []
     let currentVal = 0
     for (let i = 0; i <= stopTime; i += 10) {
-      const pointAtTime = dataPoints.find(
-        (dataPoint) => dataPoint.timestamp == i
-      )
+      const pointAtTime = dataPoints
+        .filter((dataPoint) => dataPoint.timestamp == i)
+        .pop()
       if (pointAtTime) currentVal = pointAtTime.value
       interpolatedDataPoints.push({ timestamp: i, value: currentVal })
     }
