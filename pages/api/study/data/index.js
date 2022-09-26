@@ -23,13 +23,14 @@ export default async function handler(req, res) {
     await Study.findOneAndUpdate({ key }, { $push: { data: data._id } })
     res.status(201).json()
   } catch (error) {
+    console.log(error)
     res.status(400).send()
   }
 }
 
 function convertJoystickData(participantData) {
   const joystickData = participantData.joystickInputs
-  if (joystickData.length == 0) return
+  if (!joystickData || joystickData.length == 0) return
 
   participantData.joystickInputs = joystickData.map((dataPoint) => {
     if (dataPoint.value != undefined) return dataPoint
