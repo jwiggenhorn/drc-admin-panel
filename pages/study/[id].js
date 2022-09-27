@@ -1,54 +1,38 @@
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import useStudy from '@hooks/use-study'
-import { inputProfileNames, post } from '@lib/utils'
-import { Button, CircularProgress, Alert, Divider, FormControl, InputLabel, Select, TextField } from '@mui/material'
+import {
+  inputProfileNames,
+  generateDataForChart,
+  chartOptions,
+} from '@lib/utils'
 import { Box } from '@mui/system'
 import {
-  Chart as ChartJS,
+  Button,
+  CircularProgress,
+  Alert,
+  Divider,
+  TextField,
+} from '@mui/material'
+import {
+  Chart,
   LinearScale,
   PointElement,
   LineElement,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Scatter } from 'react-chartjs-2';
-import { useState } from 'react'
-import { ViewCarousel } from '@mui/icons-material'
+} from 'chart.js'
+import { Scatter } from 'react-chartjs-2'
 
-const generateDataForChart = (participantData, selectedParticipant) => {
-  const chartColors = ['rgba(255, 99, 132, 1)', 
-                      'rgba(53, 162, 235, 1)',
-                      'rgba(153, 102, 255, 1)']
-  const data = {
-    datasets: []
-  }
-  
-  for (const [k, v] of Object.entries(participantData[selectedParticipant])) {
-    if (v.length != 0 && k.charAt(0) != '_') {
-      data.datasets.push({
-        label: k,
-        data: Array.from(v, (e) => ({
-          x: e.timestamp,
-          y: e.value,
-        })),
-        backgroundColor: chartColors.pop(0)
-      })
-    }
-  }
-  return data
-}
-
-const handleExportData = () => {
+function handleExportData() {
   // TODO
 }
 
-export default function Home() {
+export default function StudyDetails() {
   const router = useRouter()
   const { id } = router.query
   const { study, isLoading, isError, participantData } = useStudy(id)
-  const [selectedParticipant, setSelectedParticipant] = useState(0);
-  const selectedParticipantValid = 
-    selectedParticipant >= 0 && selectedParticipant < participantData?.length;
+  const [selectedParticipant, setSelectedParticipant] = useState(0)
 
   if (isLoading) {
     return (
@@ -57,52 +41,62 @@ export default function Home() {
       </Box>
     )
   } else if (isError) {
-    <div>
-      {isError && <Alert severity="error">Error fetching study data</Alert>}
-    </div>
-  }
-  else {
-    ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
-    const options = {
-      scales: {
-        y: {
-          beginAtZero: true,
-        }
-      }
-    }
-
-    const data = generateDataForChart(participantData, selectedParticipant)
+    return <Alert severity="error">Error fetching study data</Alert>
+  } else {
+    Chart.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
     return (
       <div>
         <h1>{study?.title}</h1>
-        <Divider/>
-        
-        {study?.description && <p>Description: {study?.description}</p>}
-        <p>Key: {study?.key}</p>
-        <p>Participant Limit: {study?.participantLimit}</p>
-        <p>Input profile: {inputProfileNames.get(study?.inputProfile)}</p>
-        <Divider/>
-        <TextField
-          id="outlined-basic"
-          label="Selected Participant"
-          variant="outlined"
-          type="number"
-          value={selectedParticipant+1}
-          onChange={(e) => setSelectedParticipant(e.target.value - 1)}
-          sx={{ my: 3,  mr: 2}}
-          inputProps={{ min: 1, max: participantData?.length ?? 1 }}
-          error={!selectedParticipantValid}
-          helperText={false ? '' : `Must be between 1 and ${participantData?.length ?? 1}`}
-        />
-
-        <Button
-          variant="contained"
-          onClick={handleExportData}
-          sx={{my: 3, mx: 2, py: 2}}>
-          Export as csv
-        </Button>
-
-        <Scatter options={options} data={data}/>
+        <Divider />
+        {study?.description && (
+          <p>
+            <b>Description:</b> {study?.description}
+          </p>
+        )}
+        <p>
+          <b>Key:</b> {study?.key}
+        </p>
+        <p>
+          <b>Participant Limit:</b> {study?.participantLimit}
+        </p>
+        <p>
+          <b>Input profile:</b> {inputProfileNames.get(study?.inputProfile)}
+        </p>
+        <Divider />
+        {participantData.length > 0 ? (
+          <>
+            <TextField
+              label="Selected Participant"
+              variant="outlined"
+              type="number"
+              value={selectedParticipant + 1}
+              onChange={(e) => {
+                if (
+                  e.target.value - 1 >= 0 &&
+                  e.target.value - 1 < participantData.length
+                )
+                  setSelectedParticipant(e.target.value - 1)
+              }}
+              sx={{ my: 3, mr: 2 }}
+              inputProps={{ min: 1, max: participantData?.length ?? 1 }}
+            />
+            <Button
+              variant="contained"
+              onClick={handleExportData}
+              sx={{ my: 3, mx: 2, py: 2 }}
+            >
+              Export as csv
+            </Button>
+            <Scatter
+              options={chartOptions}
+              data={generateDataForChart(participantData, selectedParticipant)}
+            />
+          </>
+        ) : (
+          <Alert severity="info" sx={{ my: 3 }}>
+            No participant data
+          </Alert>
+        )}
       </div>
     )
   }
