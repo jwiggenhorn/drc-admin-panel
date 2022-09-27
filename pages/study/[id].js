@@ -28,8 +28,8 @@ const generateDataForChart = (participantData, selectedParticipant) => {
       data.datasets.push({
         label: k,
         data: Array.from(v, (e) => ({
-          x: e.millisecondsElapsed,
-          y: e.state,
+          x: e.timestamp,
+          y: e.value,
         })),
         backgroundColor: chartColors.pop(0)
       })
