@@ -33,7 +33,6 @@ export default function CreateStudy() {
   return (
     <div>
       <TextField
-        id="outlined-basic"
         label="Title"
         variant="outlined"
         type="text"
@@ -44,7 +43,6 @@ export default function CreateStudy() {
         sx={{ mb: 3 }}
       />
       <TextField
-        id="outlined-basic"
         label="Description (optional)"
         variant="outlined"
         type="text"
@@ -55,7 +53,6 @@ export default function CreateStudy() {
         sx={{ mb: 3 }}
       />
       <TextField
-        id="outlined-basic"
         label="Max number of participants"
         variant="outlined"
         type="number"
