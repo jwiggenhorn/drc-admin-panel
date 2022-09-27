@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import useStudy from '@hooks/use-study'
-import { post } from '@lib/utils'
+import { inputProfileNames, post } from '@lib/utils'
 import { Button, CircularProgress, Alert, Divider, FormControl, InputLabel, Select, TextField } from '@mui/material'
 import { Box } from '@mui/system'
 import {
@@ -80,7 +80,7 @@ export default function Home() {
         {study?.description && <p>Description: {study?.description}</p>}
         <p>Key: {study?.key}</p>
         <p>Participant Limit: {study?.participantLimit}</p>
-        <p>Input profile: {study?.inputProfile}</p>
+        <p>Input profile: {inputProfileNames.get(study?.inputProfile)}</p>
         <Divider/>
         <TextField
           id="outlined-basic"
