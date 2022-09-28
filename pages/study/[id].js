@@ -5,6 +5,7 @@ import {
   inputProfileNames,
   generateDataForChart,
   chartOptions,
+  exportAsCSV,
 } from '@lib/utils'
 import { Box } from '@mui/system'
 import {
@@ -23,10 +24,6 @@ import {
   Legend,
 } from 'chart.js'
 import { Scatter } from 'react-chartjs-2'
-
-function handleExportData() {
-  // TODO
-}
 
 export default function StudyDetails() {
   const router = useRouter()
@@ -82,7 +79,7 @@ export default function StudyDetails() {
             />
             <Button
               variant="contained"
-              onClick={handleExportData}
+              onClick={() => { exportAsCSV(participantData, study.inputProfile, study.title) }}
               sx={{ my: 3, mx: 2, py: 2 }}
             >
               Export as csv
