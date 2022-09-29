@@ -5,6 +5,7 @@ import {
   inputProfileNames,
   generateDataForChart,
   chartOptions,
+  exportAsCSV,
 } from '@lib/utils'
 import { Box } from '@mui/system'
 import ExportIcon from '@mui/icons-material/IosShare'
@@ -24,10 +25,6 @@ import {
   Legend,
 } from 'chart.js'
 import { Scatter } from 'react-chartjs-2'
-
-function handleExportData() {
-  // TODO
-}
 
 export default function StudyDetails() {
   const router = useRouter()
@@ -85,7 +82,7 @@ export default function StudyDetails() {
                   participantData?.length
                 }`}
               />
-              <Button onClick={handleExportData} startIcon={<ExportIcon />}>
+              <Button onClick={() => { exportAsCSV(participantData, study.inputProfile, study.title) }} startIcon={<ExportIcon />}>
                 Export as csv
               </Button>
             </span>
