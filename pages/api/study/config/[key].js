@@ -20,7 +20,13 @@ export default async function handler(req, res) {
     }
     res
       .status(200)
-      .json((({ song, inputProfile }) => ({ song, inputProfile }))(study))
+      .json(
+        (({ song, inputProfile, joystickSensitivity }) => ({
+          song,
+          inputProfile,
+          joystickSensitivity,
+        }))(study)
+      )
   } catch (error) {
     res.status(400).send()
   }

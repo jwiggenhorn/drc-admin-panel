@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     if (study.data.length >= study.participantLimit) {
       return res.status(403).send()
     }
-    convertJoystickData(participantData)
+    convertJoystickData(participantData, study.joystickSensitivity)
     interpolateData(participantData, stopTime)
     console.log(`Adding participant data for study with key ${key}...`)
     const data = await ParticipantData.create(participantData)
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
   }
 }
 
-function convertJoystickData(participantData) {
+function convertJoystickData(participantData, sensitivity) {
   const joystickData = participantData.joystickInputs
   if (!joystickData || joystickData.length == 0) return
 
@@ -42,6 +42,10 @@ function convertJoystickData(participantData) {
     let value = Math.round((degrees * 2) / 60)
     if (value == 0) value = 12
 
+    if (sensitivity == 'low') {
+      value = Math.round(value / 1.5) * 1.5
+    }
+
     return { timestamp: dataPoint.timestamp, value }
   })
 }
@@ -52,12 +56,12 @@ function interpolateData(participantData, stopTime) {
     if (dataPoints.length == 0) continue
 
     dataPoints.forEach((dataPoint) => {
-      dataPoint.timestamp = Math.round(dataPoint.timestamp / 10) * 10
+      dataPoint.timestamp = Math.round(dataPoint.timestamp / 100) * 100
     })
 
     const interpolatedDataPoints = []
     let currentVal = 0
-    for (let i = 0; i <= stopTime; i += 10) {
+    for (let i = 0; i <= stopTime; i += 100) {
       const pointAtTime = dataPoints
         .filter((dataPoint) => dataPoint.timestamp == i)
         .pop()
