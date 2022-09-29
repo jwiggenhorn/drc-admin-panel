@@ -8,6 +8,7 @@ import {
   exportAsCSV,
 } from '@lib/utils'
 import { Box } from '@mui/system'
+import ExportIcon from '@mui/icons-material/IosShare'
 import {
   Button,
   CircularProgress,
@@ -62,28 +63,29 @@ export default function StudyDetails() {
         <Divider />
         {participantData.length > 0 ? (
           <>
-            <TextField
-              label="Selected Participant"
-              variant="outlined"
-              type="number"
-              value={selectedParticipant + 1}
-              onChange={(e) => {
-                if (
-                  e.target.value - 1 >= 0 &&
-                  e.target.value - 1 < participantData.length
-                )
-                  setSelectedParticipant(e.target.value - 1)
-              }}
-              sx={{ my: 3, mr: 2 }}
-              inputProps={{ min: 1, max: participantData?.length ?? 1 }}
-            />
-            <Button
-              variant="contained"
-              onClick={() => { exportAsCSV(participantData, study.inputProfile, study.title) }}
-              sx={{ my: 3, mx: 2, py: 2 }}
-            >
-              Export as csv
-            </Button>
+            <span style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <TextField
+                label="Selected Participant"
+                variant="outlined"
+                type="number"
+                value={selectedParticipant + 1}
+                onChange={(e) => {
+                  if (
+                    e.target.value - 1 >= 0 &&
+                    e.target.value - 1 < participantData.length
+                  )
+                    setSelectedParticipant(e.target.value - 1)
+                }}
+                sx={{ mt: 3, minWidth: 200 }}
+                inputProps={{ min: 1, max: participantData?.length ?? 1 }}
+                helperText={`${selectedParticipant + 1} of ${
+                  participantData?.length
+                }`}
+              />
+              <Button onClick={() => { exportAsCSV(participantData, study.title) }} startIcon={<ExportIcon />}>
+                Export as csv
+              </Button>
+            </span>
             <Scatter
               options={chartOptions}
               data={generateDataForChart(participantData, selectedParticipant)}
