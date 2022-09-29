@@ -15,6 +15,9 @@ export default async function handler(req, res) {
     if (!study) {
       return res.status(404).send()
     }
+    if (study.data.length >= study.participantLimit) {
+      return res.status(403).send()
+    }
     res
       .status(200)
       .json((({ song, inputProfile }) => ({ song, inputProfile }))(study))
