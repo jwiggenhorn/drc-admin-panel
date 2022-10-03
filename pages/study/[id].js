@@ -82,7 +82,12 @@ export default function StudyDetails() {
                   participantData?.length
                 }`}
               />
-              <Button onClick={() => { exportAsCSV(participantData, study.inputProfile, study.title) }} startIcon={<ExportIcon />}>
+              <Button
+                onClick={() => {
+                  exportAsCSV(participantData, study.inputProfile, study.title)
+                }}
+                startIcon={<ExportIcon />}
+              >
                 Export as csv
               </Button>
             </span>
@@ -93,7 +98,7 @@ export default function StudyDetails() {
           </>
         ) : (
           <Alert severity="info" sx={{ my: 3 }}>
-            No participant data
+            No participant data found.
           </Alert>
         )}
       </div>
