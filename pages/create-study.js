@@ -8,6 +8,10 @@ import {
   InputLabel,
   FormControl,
   MenuItem,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from '@mui/material'
 
 export default function CreateStudy() {
@@ -15,10 +19,12 @@ export default function CreateStudy() {
   const [description, setDescription] = useState('')
   const [participantLimit, setParticipantLimit] = useState(1)
   const [inputProfile, setInputProfile] = useState(0)
+  const [joystickSensitivity, setJoystickSensitivity] = useState('low')
   const router = useRouter()
   const isValidParticipantLimit =
     participantLimit >= 1 && participantLimit <= 500
   const isValid = title && isValidParticipantLimit
+  const joystickProfiles = [2, 5, 10, 11, 12, 15]
 
   async function handleCreateStudy() {
     await post('/api/study', {
@@ -26,6 +32,7 @@ export default function CreateStudy() {
       description,
       participantLimit,
       inputProfile,
+      joystickSensitivity,
     })
     router.push('/')
   }
@@ -69,7 +76,7 @@ export default function CreateStudy() {
           value={inputProfile}
           label="Input Profile"
           onChange={(e) => setInputProfile(e.target.value)}
-          sx={{ mb: 4 }}
+          sx={{ mb: 4, mr: 3 }}
         >
           {[...inputProfileNames].map((value) => (
             <MenuItem key={value} value={value[0]}>
@@ -78,6 +85,33 @@ export default function CreateStudy() {
           ))}
         </Select>
       </FormControl>
+      {joystickProfiles.includes(inputProfile) && (
+        <FormControl>
+          <FormLabel>Joystick Sensitivity</FormLabel>
+          <RadioGroup row>
+            <FormControlLabel
+              label="Low"
+              value="low"
+              control={
+                <Radio
+                  checked={joystickSensitivity === 'low'}
+                  onChange={() => setJoystickSensitivity('low')}
+                />
+              }
+            />
+            <FormControlLabel
+              label="High"
+              value="high"
+              control={
+                <Radio
+                  checked={joystickSensitivity === 'high'}
+                  onChange={() => setJoystickSensitivity('high')}
+                />
+              }
+            />
+          </RadioGroup>
+        </FormControl>
+      )}
       <br />
       <Button
         variant="contained"
