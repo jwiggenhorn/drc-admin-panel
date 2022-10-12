@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { inputProfileNames, post } from '@lib/utils'
+import { useEffect, useState } from 'react'
+import { inputProfileNames } from '@lib/utils'
 import { useRouter } from 'next/router'
 import UploadIcon from '@mui/icons-material/FileUpload'
 import {
@@ -13,6 +13,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Alert,
 } from '@mui/material'
 
 export default function CreateStudy() {
@@ -22,21 +23,50 @@ export default function CreateStudy() {
   const [inputProfile, setInputProfile] = useState(0)
   const [joystickSensitivity, setJoystickSensitivity] = useState('low')
   const [file, setFile] = useState()
+  const [errorMessage, setErrorMessage] = useState('')
   const router = useRouter()
   const isValidParticipantLimit =
     participantLimit >= 1 && participantLimit <= 500
   const isValid = title && isValidParticipantLimit
   const joystickProfiles = [2, 5, 10, 11, 12, 15]
 
+  useEffect(() => {
+    setErrorMessage('')
+  }, [
+    title,
+    description,
+    participantLimit,
+    inputProfile,
+    joystickSensitivity,
+    file,
+  ])
+
   async function handleCreateStudy() {
-    await post('/api/study', {
-      title,
-      description,
-      participantLimit,
-      inputProfile,
-      joystickSensitivity,
+    const formData = new FormData()
+    formData.append(
+      'body',
+      JSON.stringify({
+        title,
+        description,
+        participantLimit,
+        inputProfile,
+        joystickSensitivity,
+      })
+    )
+    formData.append('song', file)
+
+    await fetch('/api/study', {
+      method: 'POST',
+      body: formData,
     })
-    router.push('/')
+      .then((data) => {
+        if (data.status == 201) {
+          router.push('/')
+        } else {
+          setErrorMessage('Something went wrong - unable to create study.')
+        }
+      })
+      .catch((e) => console.error(e))
   }
 
   return (
@@ -120,10 +150,10 @@ export default function CreateStudy() {
           )}
         </span>
         {file ? (
-          <p>
+          <Alert onClose={() => setFile()} style={{ height: '100%' }}>
             <b>MP3: </b>
             {file.name.slice(0, -4)}
-          </p>
+          </Alert>
         ) : (
           <FormControl>
             <input
@@ -145,14 +175,15 @@ export default function CreateStudy() {
           </FormControl>
         )}
       </div>
-      <br />
       <Button
         variant="contained"
         onClick={handleCreateStudy}
         disabled={!isValid}
+        sx={{ mb: 3 }}
       >
         Create study
       </Button>
+      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
     </div>
   )
 }

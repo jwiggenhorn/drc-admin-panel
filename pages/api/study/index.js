@@ -2,6 +2,7 @@ import { getToken } from 'next-auth/jwt'
 import dbConnect from '@lib/db-connect'
 import { generateKey } from '@lib/utils'
 import Study from '@models/study'
+import formidable from 'formidable'
 
 // POST /study
 // Endpoint for creating studies via the admin panel.
@@ -14,6 +15,12 @@ export default async function handler(req, res) {
   }
 
   try {
+    const { body, song } = await new Promise((resolve, reject) => {
+      formidable().parse(req, (err, fields, files) => {
+        if (err) reject({ err })
+        resolve({ body: JSON.parse(fields.body), song: files.song })
+      })
+    })
     console.log(`Creating new study for user ${token.email}...`)
     // Make sure generated key doesn't already exist in DB
     let key = generateKey()
@@ -21,7 +28,7 @@ export default async function handler(req, res) {
       key = generateKey()
     }
     const study = await Study.create({
-      ...req.body,
+      ...body,
       key,
       author: token.email,
     })
@@ -29,4 +36,10 @@ export default async function handler(req, res) {
   } catch (error) {
     res.status(400).send()
   }
+}
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
 }
