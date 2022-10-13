@@ -6,6 +6,7 @@ import {
   generateDataForChart,
   chartOptions,
   exportAsCSV,
+  joystickProfiles,
 } from '@lib/utils'
 import { Box } from '@mui/system'
 import ExportIcon from '@mui/icons-material/IosShare'
@@ -60,6 +61,11 @@ export default function StudyDetails() {
         <p>
           <b>Input profile:</b> {inputProfileNames.get(study?.inputProfile)}
         </p>
+        {joystickProfiles.includes(study?.inputProfile) && (
+          <p>
+            <b>Joystick sensitivity:</b> {study?.joystickSensitivity}
+          </p>
+        )}
         <Divider />
         {participantData.length > 0 ? (
           <>
@@ -82,7 +88,12 @@ export default function StudyDetails() {
                   participantData?.length
                 }`}
               />
-              <Button onClick={() => { exportAsCSV(participantData, study.inputProfile, study.title) }} startIcon={<ExportIcon />}>
+              <Button
+                onClick={() => {
+                  exportAsCSV(participantData, study.inputProfile, study.title)
+                }}
+                startIcon={<ExportIcon />}
+              >
                 Export as csv
               </Button>
             </span>

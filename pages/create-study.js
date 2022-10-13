@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { inputProfileNames } from '@lib/utils'
+import { inputProfileNames, joystickProfiles } from '@lib/utils'
 import { useRouter } from 'next/router'
 import UploadIcon from '@mui/icons-material/FileUpload'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -30,7 +30,6 @@ export default function CreateStudy() {
   const isValidParticipantLimit =
     participantLimit >= 1 && participantLimit <= 500
   const isValid = title && isValidParticipantLimit
-  const joystickProfiles = [2, 5, 10, 11, 12, 15]
 
   useEffect(() => {
     setErrorMessage('')

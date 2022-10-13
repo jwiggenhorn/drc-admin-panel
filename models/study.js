@@ -12,7 +12,6 @@ const StudySchema = new mongoose.Schema({
   },
   data: [ObjectId],
   participantLimit: Number,
-  song: ObjectId,
   inputProfile: Number,
   joystickSensitivity: String,
 })
