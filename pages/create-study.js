@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { inputProfileNames } from '@lib/utils'
 import { useRouter } from 'next/router'
 import UploadIcon from '@mui/icons-material/FileUpload'
+import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Button,
   Select,
@@ -24,6 +25,7 @@ export default function CreateStudy() {
   const [joystickSensitivity, setJoystickSensitivity] = useState('low')
   const [file, setFile] = useState()
   const [errorMessage, setErrorMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const isValidParticipantLimit =
     participantLimit >= 1 && participantLimit <= 500
@@ -42,6 +44,7 @@ export default function CreateStudy() {
   ])
 
   async function handleCreateStudy() {
+    setIsLoading(true)
     const formData = new FormData()
     formData.append(
       'body',
@@ -55,18 +58,15 @@ export default function CreateStudy() {
     )
     formData.append('song', file)
 
-    await fetch('/api/study', {
+    const result = await fetch('/api/study', {
       method: 'POST',
       body: formData,
     })
-      .then((data) => {
-        if (data.status == 201) {
-          router.push('/')
-        } else {
-          setErrorMessage('Something went wrong - unable to create study.')
-        }
-      })
-      .catch((e) => console.error(e))
+    if (result.ok) {
+      router.push('/')
+    } else {
+      setErrorMessage('Something went wrong - unable to create study.')
+    }
   }
 
   return (
@@ -80,6 +80,7 @@ export default function CreateStudy() {
         multiline
         fullWidth
         sx={{ mb: 3 }}
+        disabled={isLoading}
       />
       <TextField
         label="Description (optional)"
@@ -90,6 +91,7 @@ export default function CreateStudy() {
         multiline
         fullWidth
         sx={{ mb: 3 }}
+        disabled={isLoading}
       />
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>
@@ -105,6 +107,7 @@ export default function CreateStudy() {
             helperText={
               isValidParticipantLimit ? '' : 'Must be between 1 and 500'
             }
+            disabled={isLoading}
           />
           <FormControl style={{ minWidth: 120 }}>
             <InputLabel>Input Profile</InputLabel>
@@ -113,6 +116,7 @@ export default function CreateStudy() {
               label="Input Profile"
               onChange={(e) => setInputProfile(e.target.value)}
               sx={{ mb: 4, mr: 3 }}
+              disabled={isLoading}
             >
               {[...inputProfileNames].map((value) => (
                 <MenuItem key={value} value={value[0]}>
@@ -122,7 +126,7 @@ export default function CreateStudy() {
             </Select>
           </FormControl>
           {joystickProfiles.includes(inputProfile) && (
-            <FormControl>
+            <FormControl sx={{ mb: 3 }}>
               <FormLabel>Joystick Sensitivity</FormLabel>
               <RadioGroup row>
                 <FormControlLabel
@@ -134,6 +138,7 @@ export default function CreateStudy() {
                       onChange={() => setJoystickSensitivity('low')}
                     />
                   }
+                  disabled={isLoading}
                 />
                 <FormControlLabel
                   label="High"
@@ -144,13 +149,17 @@ export default function CreateStudy() {
                       onChange={() => setJoystickSensitivity('high')}
                     />
                   }
+                  disabled={isLoading}
                 />
               </RadioGroup>
             </FormControl>
           )}
         </span>
         {file ? (
-          <Alert onClose={() => setFile()} style={{ height: '100%' }}>
+          <Alert
+            onClose={isLoading ? null : () => setFile()}
+            style={{ height: '100%' }}
+          >
             <b>MP3: </b>
             {file.name.slice(0, -4)}
           </Alert>
@@ -175,14 +184,15 @@ export default function CreateStudy() {
           </FormControl>
         )}
       </div>
-      <Button
+      <LoadingButton
         variant="contained"
         onClick={handleCreateStudy}
         disabled={!isValid}
         sx={{ mb: 3 }}
+        loading={isLoading}
       >
         Create study
-      </Button>
+      </LoadingButton>
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
     </div>
   )

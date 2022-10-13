@@ -11,7 +11,9 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@google-cloud/storage": "^6.5.2",
     "@mui/icons-material": "^5.10.3",
+    "@mui/lab": "^5.0.0-alpha.103",
     "@mui/material": "^5.10.3",
     "chart.js": "^3.9.1",
     "cors": "^2.8.5",

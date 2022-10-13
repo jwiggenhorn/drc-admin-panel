@@ -3,6 +3,7 @@ import dbConnect from '@lib/db-connect'
 import { generateKey } from '@lib/utils'
 import Study from '@models/study'
 import formidable from 'formidable'
+import { Storage } from '@google-cloud/storage'
 
 // POST /study
 // Endpoint for creating studies via the admin panel.
@@ -21,6 +22,7 @@ export default async function handler(req, res) {
         resolve({ body: JSON.parse(fields.body), song: files.song })
       })
     })
+    await uploadToCloudStorage(song)
     console.log(`Creating new study for user ${token.email}...`)
     // Make sure generated key doesn't already exist in DB
     let key = generateKey()
@@ -36,6 +38,21 @@ export default async function handler(req, res) {
   } catch (error) {
     res.status(400).send()
   }
+}
+
+async function uploadToCloudStorage(song) {
+  if (!song) return
+  const storage = new Storage({
+    projectId: process.env.PROJECT_ID,
+    credentials: {
+      client_email: process.env.CLIENT_EMAIL,
+      private_key: process.env.PRIVATE_KEY,
+    },
+  })
+
+  await storage
+    .bucket(process.env.BUCKET_NAME)
+    .upload(song.filepath, { destination: song.originalFilename })
 }
 
 export const config = {
