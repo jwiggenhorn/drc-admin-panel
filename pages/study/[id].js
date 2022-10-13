@@ -104,7 +104,7 @@ export default function StudyDetails() {
           </>
         ) : (
           <Alert severity="info" sx={{ my: 3 }}>
-            No participant data
+            No participant data found.
           </Alert>
         )}
       </div>
