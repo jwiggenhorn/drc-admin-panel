@@ -22,7 +22,7 @@ export default async function handler(req, res) {
         resolve({ body: JSON.parse(fields.body), song: files.song })
       })
     })
-    await uploadToCloudStorage(song)
+    const url = await uploadToCloudStorage(song)
     console.log(`Creating new study for user ${token.email}...`)
     // Make sure generated key doesn't already exist in DB
     let key = generateKey()
@@ -33,10 +33,12 @@ export default async function handler(req, res) {
       ...body,
       key,
       author: token.email,
+      url,
     })
     res.status(201).json({ data: study })
   } catch (error) {
     res.status(400).send()
+    console.error(error)
   }
 }
 
@@ -53,6 +55,15 @@ async function uploadToCloudStorage(song) {
   await storage
     .bucket(process.env.BUCKET_NAME)
     .upload(song.filepath, { destination: song.originalFilename })
+
+  const [url] = await storage
+    .bucket(process.env.BUCKET_NAME)
+    .file(song.originalFilename)
+    .getSignedUrl({
+      action: 'read',
+      expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
+    })
+  return url
 }
 
 export const config = {

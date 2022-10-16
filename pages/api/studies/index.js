@@ -18,5 +18,6 @@ export default async function handler(req, res) {
     res.status(200).json(studies)
   } catch (error) {
     res.status(400).send()
+    console.error(error)
   }
 }

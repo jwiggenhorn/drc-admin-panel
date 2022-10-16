@@ -44,6 +44,7 @@ export default function CreateStudy() {
 
   async function handleCreateStudy() {
     setIsLoading(true)
+    setErrorMessage('')
     const formData = new FormData()
     formData.append(
       'body',
@@ -65,6 +66,7 @@ export default function CreateStudy() {
       router.push('/')
     } else {
       setErrorMessage('Something went wrong - unable to create study.')
+      setIsLoading(false)
     }
   }
 

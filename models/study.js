@@ -14,6 +14,7 @@ const StudySchema = new mongoose.Schema({
   participantLimit: Number,
   inputProfile: Number,
   joystickSensitivity: String,
+  url: String,
 })
 
 export default mongoose.models.Study || mongoose.model('Study', StudySchema)
