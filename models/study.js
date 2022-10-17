@@ -12,9 +12,9 @@ const StudySchema = new mongoose.Schema({
   },
   data: [ObjectId],
   participantLimit: Number,
-  song: ObjectId,
   inputProfile: Number,
   joystickSensitivity: String,
+  url: String,
 })
 
 export default mongoose.models.Study || mongoose.model('Study', StudySchema)

@@ -27,5 +27,6 @@ export default async function handler(req, res) {
     res.status(200).json({ study, data })
   } catch (error) {
     res.status(400).send()
+    console.error(error)
   }
 }
