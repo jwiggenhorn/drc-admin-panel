@@ -8,13 +8,16 @@ import {
   exportAsCSV,
 } from '@lib/utils'
 import { Box } from '@mui/system'
-import ExportIcon from '@mui/icons-material/IosShare'
+import {
+  ExportIcon,
+  DeleteIcon
+} from '@mui/icons-material/IosShare'
 import {
   Button,
   CircularProgress,
   Alert,
   Divider,
-  TextField,
+  TextField
 } from '@mui/material'
 import {
   Chart,
@@ -25,6 +28,13 @@ import {
   Legend,
 } from 'chart.js'
 import { Scatter } from 'react-chartjs-2'
+import { deleteStudy } from 'pages/api/study/[id]'
+
+// async function handleDelete() {
+//   await fetch(`/api/study/${id}`, {
+//     method: 'DELETE',
+//   })
+// }
 
 export default function StudyDetails() {
   const router = useRouter()
@@ -44,6 +54,9 @@ export default function StudyDetails() {
     Chart.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
     return (
       <div>
+        {/* <Button onClick={() => { handleDelete() }} startIcon={<DeleteIcon />}>
+          Delete
+        </Button> */}
         <h1>{study?.title}</h1>
         <Divider />
         {study?.description && (
