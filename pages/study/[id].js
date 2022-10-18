@@ -8,7 +8,7 @@ import {
   exportAsCSV,
   joystickProfiles,
 } from '@lib/utils'
-import { Box } from '@mui/system'
+import DeleteIcon from '@mui/icons-material/Delete'
 import ExportIcon from '@mui/icons-material/IosShare'
 import {
   Button,
@@ -16,6 +16,13 @@ import {
   Alert,
   Divider,
   TextField,
+  Box,
+  IconButton,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  DialogActions,
 } from '@mui/material'
 import {
   Chart,
@@ -32,6 +39,21 @@ export default function StudyDetails() {
   const { id } = router.query
   const { study, isLoading, isError, participantData } = useStudy(id)
   const [selectedParticipant, setSelectedParticipant] = useState(0)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [open, setOpen] = useState(false)
+  const [name, setName] = useState('')
+
+  async function handleDelete() {
+    setErrorMessage('')
+    const result = await fetch(`/api/study/${id}`, {
+      method: 'DELETE',
+    })
+    if (result.ok) {
+      router.push('/')
+    } else {
+      setErrorMessage('Something went wrong - unable to delete study.')
+    }
+  }
 
   if (isLoading) {
     return (
@@ -45,7 +67,12 @@ export default function StudyDetails() {
     Chart.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
     return (
       <div>
-        <h1>{study?.title}</h1>
+        <span style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <h1>{study?.title}</h1>
+          <IconButton onClick={() => setOpen(true)}>
+            <DeleteIcon />
+          </IconButton>
+        </span>
         <Divider />
         {study?.description && (
           <p>
@@ -107,6 +134,34 @@ export default function StudyDetails() {
             No participant data found.
           </Alert>
         )}
+        <Dialog open={open} onClose={() => setOpen(false)}>
+          <DialogTitle>
+            Delete <b>{study?.title}</b>?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              This action cannot be undone. Please type the name of the study to
+              confirm.
+            </DialogContentText>
+            <TextField
+              fullWidth
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              sx={{ my: 2 }}
+            />
+            <DialogActions>
+              <Button onClick={() => setOpen(false)}>Cancel</Button>
+              <Button
+                variant="contained"
+                disabled={name !== study?.title}
+                onClick={handleDelete}
+              >
+                Submit
+              </Button>
+            </DialogActions>
+          </DialogContent>
+        </Dialog>
+        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       </div>
     )
   }
