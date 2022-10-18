@@ -44,6 +44,7 @@ export default function StudyDetails() {
   const [name, setName] = useState('')
 
   async function handleDelete() {
+    setErrorMessage('')
     const result = await fetch(`/api/study/${id}`, {
       method: 'DELETE',
     })
@@ -160,6 +161,7 @@ export default function StudyDetails() {
             </DialogActions>
           </DialogContent>
         </Dialog>
+        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       </div>
     )
   }
