@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { React, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import useStudy from '@hooks/use-study'
+import DeleteIcon from '@mui/icons-material/Delete'
 import {
   inputProfileNames,
   generateDataForChart,
@@ -8,16 +9,16 @@ import {
   exportAsCSV,
 } from '@lib/utils'
 import { Box } from '@mui/system'
-import {
-  ExportIcon,
-  DeleteIcon
-} from '@mui/icons-material/IosShare'
+import { ExportIcon } from '@mui/icons-material/IosShare'
+import Box2 from '@mui/material/Box';
 import {
   Button,
   CircularProgress,
   Alert,
   Divider,
-  TextField
+  TextField,
+  Typography,
+  Modal
 } from '@mui/material'
 import {
   Chart,
@@ -28,19 +29,27 @@ import {
   Legend,
 } from 'chart.js'
 import { Scatter } from 'react-chartjs-2'
-import { deleteStudy } from 'pages/api/study/[id]'
-
-// async function handleDelete() {
-//   await fetch(`/api/study/${id}`, {
-//     method: 'DELETE',
-//   })
-// }
 
 export default function StudyDetails() {
   const router = useRouter()
   const { id } = router.query
   const { study, isLoading, isError, participantData } = useStudy(id)
   const [selectedParticipant, setSelectedParticipant] = useState(0)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState('');
+
+  async function handleDelete() {
+    const result = await fetch(`/api/study/${id}`, {
+      method: 'DELETE',
+    })
+    if (result.ok) {
+      router.push('/')
+    }
+    else {
+      setErrorMessage('Something went wrong - unable to delete study.')
+    }
+  }
 
   if (isLoading) {
     return (
@@ -54,9 +63,12 @@ export default function StudyDetails() {
     Chart.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
     return (
       <div>
-        {/* <Button onClick={() => { handleDelete() }} startIcon={<DeleteIcon />}>
-          Delete
-        </Button> */}
+        <Button
+          onClick={() => {
+            setOpen(true)
+          }}
+          startIcon={<DeleteIcon />}
+        ></Button>
         <h1>{study?.title}</h1>
         <Divider />
         {study?.description && (
@@ -95,7 +107,12 @@ export default function StudyDetails() {
                   participantData?.length
                 }`}
               />
-              <Button onClick={() => { exportAsCSV(participantData, study.inputProfile, study.title) }} startIcon={<ExportIcon />}>
+              <Button
+                onClick={() => {
+                  exportAsCSV(participantData, study.inputProfile, study.title)
+                }}
+                startIcon={<ExportIcon />}
+              >
                 Export as csv
               </Button>
             </span>
@@ -109,7 +126,40 @@ export default function StudyDetails() {
             No participant data
           </Alert>
         )}
+          
+        <Modal 
+          open={open}
+          onClose={ () => setOpen(false)}>
+          <Box2 sx={style}> 
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Delete study?
+            </Typography>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Type in study name to confirm
+            </Typography>
+            <TextField value={name} onChange={e => setName(e.target.value) }>
+            </TextField>
+            <Button>
+              Cancel
+            </Button>
+            <Button disabled={name !== study?.title} onClick={ handleDelete }>
+              Submit
+            </Button>
+          </Box2>
+        </Modal>
       </div>
     )
   }
 }
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 350,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
