@@ -6,6 +6,7 @@ import {
   generateDataForChart,
   chartOptions,
   exportAsCSV,
+  joystickProfiles,
 } from '@lib/utils'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ExportIcon from '@mui/icons-material/IosShare'
@@ -86,6 +87,11 @@ export default function StudyDetails() {
         <p>
           <b>Input profile:</b> {inputProfileNames.get(study?.inputProfile)}
         </p>
+        {joystickProfiles.includes(study?.inputProfile) && (
+          <p>
+            <b>Joystick sensitivity:</b> {study?.joystickSensitivity}
+          </p>
+        )}
         <Divider />
         {participantData.length > 0 ? (
           <>
@@ -124,7 +130,7 @@ export default function StudyDetails() {
           </>
         ) : (
           <Alert severity="info" sx={{ my: 3 }}>
-            No participant data
+            No participant data found.
           </Alert>
         )}
         <Dialog open={open} onClose={() => setOpen(false)}>

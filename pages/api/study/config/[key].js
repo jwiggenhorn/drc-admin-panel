@@ -18,16 +18,15 @@ export default async function handler(req, res) {
     if (study.data.length >= study.participantLimit) {
       return res.status(403).send()
     }
-    res
-      .status(200)
-      .json(
-        (({ song, inputProfile, joystickSensitivity }) => ({
-          song,
-          inputProfile,
-          joystickSensitivity,
-        }))(study)
-      )
+    res.status(200).json(
+      (({ url, inputProfile, joystickSensitivity }) => ({
+        url,
+        inputProfile,
+        joystickSensitivity,
+      }))(study)
+    )
   } catch (error) {
     res.status(400).send()
+    console.error(error)
   }
 }

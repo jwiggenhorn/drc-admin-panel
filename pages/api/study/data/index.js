@@ -23,8 +23,8 @@ export default async function handler(req, res) {
     await Study.findOneAndUpdate({ key }, { $push: { data: data._id } })
     res.status(201).json()
   } catch (error) {
-    console.log(error)
     res.status(400).send()
+    console.error(error)
   }
 }
 
