@@ -26,15 +26,16 @@ export default async function handler(req, res) {
         res.status(200).json({ study, data })
         break
       case 'DELETE':
-        console.log(study.data)
-        study.data.forEach(async(d)=>{ await ParticipantData.deleteOne({ _id: d } )})
+        console.log(`Deleting study with id ${id} (including participant data)`)
+        study.data.forEach(async (participant) => {
+          await ParticipantData.deleteOne({ _id: participant })
+        })
         await Study.deleteOne({ _id: study._id })
         res.status(200).send()
         break
     }
   } catch (error) {
     res.status(400).send()
+    console.error(error)
   }
 }
-
-

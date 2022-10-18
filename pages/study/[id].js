@@ -1,24 +1,27 @@
-import { React, useState, useRef } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import useStudy from '@hooks/use-study'
-import DeleteIcon from '@mui/icons-material/Delete'
 import {
   inputProfileNames,
   generateDataForChart,
   chartOptions,
   exportAsCSV,
 } from '@lib/utils'
-import { Box } from '@mui/system'
-import { ExportIcon } from '@mui/icons-material/IosShare'
-import Box2 from '@mui/material/Box';
+import DeleteIcon from '@mui/icons-material/Delete'
+import ExportIcon from '@mui/icons-material/IosShare'
 import {
   Button,
   CircularProgress,
   Alert,
   Divider,
   TextField,
-  Typography,
-  Modal
+  Box,
+  IconButton,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  DialogActions,
 } from '@mui/material'
 import {
   Chart,
@@ -36,8 +39,8 @@ export default function StudyDetails() {
   const { study, isLoading, isError, participantData } = useStudy(id)
   const [selectedParticipant, setSelectedParticipant] = useState(0)
   const [errorMessage, setErrorMessage] = useState('')
-  const [open, setOpen] = useState(false);
-  const [name, setName] = useState('');
+  const [open, setOpen] = useState(false)
+  const [name, setName] = useState('')
 
   async function handleDelete() {
     const result = await fetch(`/api/study/${id}`, {
@@ -45,8 +48,7 @@ export default function StudyDetails() {
     })
     if (result.ok) {
       router.push('/')
-    }
-    else {
+    } else {
       setErrorMessage('Something went wrong - unable to delete study.')
     }
   }
@@ -63,13 +65,12 @@ export default function StudyDetails() {
     Chart.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
     return (
       <div>
-        <Button
-          onClick={() => {
-            setOpen(true)
-          }}
-          startIcon={<DeleteIcon />}
-        ></Button>
-        <h1>{study?.title}</h1>
+        <span style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <h1>{study?.title}</h1>
+          <IconButton onClick={() => setOpen(true)}>
+            <DeleteIcon />
+          </IconButton>
+        </span>
         <Divider />
         {study?.description && (
           <p>
@@ -126,40 +127,34 @@ export default function StudyDetails() {
             No participant data
           </Alert>
         )}
-          
-        <Modal 
-          open={open}
-          onClose={ () => setOpen(false)}>
-          <Box2 sx={style}> 
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Delete study?
-            </Typography>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Type in study name to confirm
-            </Typography>
-            <TextField value={name} onChange={e => setName(e.target.value) }>
-            </TextField>
-            <Button>
-              Cancel
-            </Button>
-            <Button disabled={name !== study?.title} onClick={ handleDelete }>
-              Submit
-            </Button>
-          </Box2>
-        </Modal>
+        <Dialog open={open} onClose={() => setOpen(false)}>
+          <DialogTitle>
+            Delete <b>{study?.title}</b>?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              This action cannot be undone. Please type the name of the study to
+              confirm.
+            </DialogContentText>
+            <TextField
+              fullWidth
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              sx={{ my: 2 }}
+            />
+            <DialogActions>
+              <Button onClick={() => setOpen(false)}>Cancel</Button>
+              <Button
+                variant="contained"
+                disabled={name !== study?.title}
+                onClick={handleDelete}
+              >
+                Submit
+              </Button>
+            </DialogActions>
+          </DialogContent>
+        </Dialog>
       </div>
     )
   }
 }
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 350,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
