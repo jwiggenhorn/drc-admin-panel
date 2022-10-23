@@ -36,10 +36,10 @@ function convertJoystickData(participantData, sensitivity) {
     if (dataPoint.value != undefined) return dataPoint
     const radians = Math.atan2(dataPoint.y, dataPoint.x) - Math.PI / 2
 
-    let degrees = ((radians * 180) / Math.PI) * -1
+    let degrees = (radians * 180) / Math.PI
     if (degrees < 0) degrees += 360.0
 
-    let value = Math.round((degrees * 2) / 60)
+    let value = (Math.round((degrees * 2) / 60) + 6) % 12
     if (value == 0) value = 12
 
     if (sensitivity == 'low') {
