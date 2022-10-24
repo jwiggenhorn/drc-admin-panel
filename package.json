@@ -17,7 +17,6 @@
     "@mui/material": "^5.10.3",
     "chart.js": "^3.9.1",
     "cors": "^2.8.5",
-    "formidable": "^2.0.1",
     "mongoose": "^6.4.4",
     "next": "12.1.6",
     "next-auth": "^4.10.3",

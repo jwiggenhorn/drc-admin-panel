@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { inputProfileNames, joystickProfiles } from '@lib/utils'
+import { inputProfileNames, joystickProfiles, uploadFile } from '@lib/utils'
 import { useRouter } from 'next/router'
 import UploadIcon from '@mui/icons-material/FileUpload'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -45,22 +45,21 @@ export default function CreateStudy() {
   async function handleCreateStudy() {
     setIsLoading(true)
     setErrorMessage('')
-    const formData = new FormData()
-    formData.append(
-      'body',
-      JSON.stringify({
+    if (file) await uploadFile(file)
+
+    const result = await fetch('/api/study', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         title,
         description,
         participantLimit,
         inputProfile,
         joystickSensitivity,
-      })
-    )
-    formData.append('song', file)
-
-    const result = await fetch('/api/study', {
-      method: 'POST',
-      body: formData,
+        songFilename: file?.name,
+      }),
     })
     if (result.ok) {
       router.push('/')
