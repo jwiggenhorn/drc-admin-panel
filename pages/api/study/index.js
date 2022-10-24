@@ -2,7 +2,6 @@ import { getToken } from 'next-auth/jwt'
 import dbConnect from '@lib/db-connect'
 import { generateKey } from '@lib/utils'
 import Study from '@models/study'
-import formidable from 'formidable'
 import { Storage } from '@google-cloud/storage'
 
 // POST /study
@@ -16,13 +15,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { body, song } = await new Promise((resolve, reject) => {
-      formidable().parse(req, (err, fields, files) => {
-        if (err) reject({ err })
-        resolve({ body: JSON.parse(fields.body), song: files.song })
-      })
-    })
-    const url = await uploadToCloudStorage(song)
+    const { songFilename, ...studyDetails } = req.body
+    const url = await getSongUrl(songFilename)
     console.log(`Creating new study for user ${token.email}...`)
     // Make sure generated key doesn't already exist in DB
     let key = generateKey()
@@ -30,7 +24,7 @@ export default async function handler(req, res) {
       key = generateKey()
     }
     const study = await Study.create({
-      ...body,
+      ...studyDetails,
       key,
       author: token.email,
       url,
@@ -42,8 +36,8 @@ export default async function handler(req, res) {
   }
 }
 
-async function uploadToCloudStorage(song) {
-  if (!song) return
+async function getSongUrl(songFilename) {
+  if (!songFilename) return
   const storage = new Storage({
     projectId: process.env.PROJECT_ID,
     credentials: {
@@ -52,22 +46,12 @@ async function uploadToCloudStorage(song) {
     },
   })
 
-  await storage
-    .bucket(process.env.BUCKET_NAME)
-    .upload(song.filepath, { destination: song.originalFilename })
-
   const [url] = await storage
     .bucket(process.env.BUCKET_NAME)
-    .file(song.originalFilename)
+    .file(songFilename)
     .getSignedUrl({
       action: 'read',
       expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
     })
   return url
-}
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
 }
