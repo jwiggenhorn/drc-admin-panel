@@ -3,6 +3,7 @@ import { Button, Box, AppBar, Toolbar } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home'
 import AddIcon from '@mui/icons-material/Add'
 import Login from '@components/login.js'
+import QuestionMark from '@mui/icons-material/QuestionMark'
 
 export default function Navbar() {
   return (
@@ -16,8 +17,13 @@ export default function Navbar() {
               </Button>
             </Link>
             <Link href="/create-study" passHref>
-              <Button color="inherit" startIcon={<AddIcon />}>
+              <Button color="inherit" startIcon={<AddIcon />} sx={{ mr: 2 }}>
                 New Study
+              </Button>
+            </Link>
+            <Link href="/about" passHref>
+              <Button color="inherit" startIcon={<QuestionMark />}>
+                About
               </Button>
             </Link>
           </span>
