@@ -51,7 +51,7 @@ async function getSongUrl(songFilename) {
     .file(songFilename)
     .getSignedUrl({
       action: 'read',
-      expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
+      expires: Date.now() + 30 * 24 * 60 * 60 * 1000, // 30 days
     })
   return url
 }
