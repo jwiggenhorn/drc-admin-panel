@@ -41,6 +41,11 @@ export default function About() {
         a description, the maximum number of study submissions allowed, the
         Input Profile (see below), and also optionally upload an mp3 file to be
         played on the mobile device during their participation.
+        <br />
+        <br />
+        Note: mp3 files are only stored for 30 days, after which the study will
+        no longer accept participants. This is to keep the cost of cloud storage
+        low and may change in the future.
       </p>
       <h3>Input Profiles</h3>
       <p>

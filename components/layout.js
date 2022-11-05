@@ -11,7 +11,7 @@ export default function Layout({ children }) {
   return (
     <>
       <Navbar />
-      {session || router.route === '/privacy' ? (
+      {session || router.route === '/privacy' || router.route === '/about' ? (
         <main>
           <Container maxWidth="md">{children}</Container>
         </main>
