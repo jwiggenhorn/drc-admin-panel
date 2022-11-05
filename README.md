@@ -38,43 +38,52 @@ The DRC project is completely open-source and contributions towards its continue
 
 ## Getting Started
 
-To get a local copy up and running follow these simple example steps.
+To get a local copy up and running follow these steps.
 
 ### Prerequisites
 
-- npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Install the following:
 
-### Installation
+- [Node.js](https://nodejs.org/)
+- [MongoDB Community Edition](https://www.mongodb.com/docs/manual/administration/install-community/)
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+### Running Locally
+
+1. Clone the repo
    ```sh
    git clone https://github.com/jwiggenhorn/drc-admin-panel.git
    ```
-3. Install NPM packages
+2. Install NPM packages
    ```sh
-   npm install
+   npm i
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API'
+3. Create an .env.local file at the project root directory with the following environment variables:
+
+- MONGODB_URI
+- GOOGLE_CLIENT_ID
+- GOOGLE_CLIENT_SECRET
+- NEXTAUTH_SECRET
+- NEXTAUTH_URL
+- PROJECT_ID
+- CLIENT_EMAIL
+- PRIVATE_KEY
+- BUCKET_NAME
+
+These are documented in detail [here](https://github.com/jwiggenhorn/drc-admin-panel/wiki/Environment-Variables)
+
+4. Build and run
+   ```sh
+   npm run dev
    ```
 
 ## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-  - [ ] Nested Feature
 
 See the [open issues](https://github.com/jwiggenhorn/drc-admin-panel/issues) for a full list of proposed features (and known issues).
 
 ## Contributing
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
