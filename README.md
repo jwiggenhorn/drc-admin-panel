@@ -1,8 +1,6 @@
 [![Contributors][contributors-shield]][contributors-url] [![Forks][forks-shield]][forks-url] [![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url] [![GNU General Public License][license-shield]][license-url]
 
 <div align="center">
-<br />
-<div align="center">
   <a href="https://github.com/jwiggenhorn/drc-admin-panel">
     <img src="public/logo.png" alt="Logo" width="80" height="80">
   </a>
@@ -50,10 +48,12 @@ Install the following:
 ### Running Locally
 
 1. Clone the repo
+
    ```sh
    git clone https://github.com/jwiggenhorn/drc-admin-panel.git
    ```
 2. Install NPM packages
+
    ```sh
    npm i
    ```
@@ -72,6 +72,7 @@ Install the following:
 These are documented in detail [here](https://github.com/jwiggenhorn/drc-admin-panel/wiki/Environment-Variables)
 
 4. Build and run
+
    ```sh
    npm run dev
    ```
