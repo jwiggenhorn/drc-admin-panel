@@ -1,4 +1,5 @@
 import Link from '@mui/material/Link'
+
 export default function About() {
   return (
     <div>
@@ -11,9 +12,9 @@ export default function About() {
         <br />
         <br />
         This project was developed by a group of four students at Southern
-        Illinois University Edwardsville for the university's music department
-        and was inspired by the Continuous Response Digital Interface, a
-        hardware device historically used in music research.
+        Illinois University Edwardsville for the university&apos;s music
+        department and was inspired by the Continuous Response Digital
+        Interface, a hardware device historically used in music research.
         <br />
         <br />
         The goal of this project is to give researchers a better way to measure
@@ -35,11 +36,11 @@ export default function About() {
       </p>
       <h2>How to create a new study</h2>
       <p>
-        First, click the '+ NEW STUDY' button in the navigation bar at the top
-        of the page. On this page you can specify a title for the study, a
-        description, the maximum number of study submissions allowed, the Input
-        Profile (see below), and also optionally upload an mp3 file to be played
-        on the mobile device during their participation.
+        First, click the &apos;+ NEW STUDY&apos; button in the navigation bar at
+        the top of the page. On this page you can specify a title for the study,
+        a description, the maximum number of study submissions allowed, the
+        Input Profile (see below), and also optionally upload an mp3 file to be
+        played on the mobile device during their participation.
       </p>
       <h3>Input Profiles</h3>
       <p>
@@ -58,19 +59,20 @@ export default function About() {
       <h2>Using a study</h2>
       <p>
         After creating a study, you can access it by clicking its name in the
-        list of studies on the 'HOME' page. When selected you will see the study
-        details including the 'Study Key' which is a randomly generated 5
-        character alphanumeric code that the study participant can enter into
-        the DRC Interface mobile application to load the configured input
-        profile and audio (if an mp3 was uploaded) for the study.
+        list of studies on the &apos;HOME&apos; page. When selected you will see
+        the study details including the &apos;Study Key&apos; which is a
+        randomly generated 5 character alphanumeric code that the study
+        participant can enter into the DRC Interface mobile application to load
+        the configured input profile and audio (if an mp3 was uploaded) for the
+        study.
         <br />
         <br />
         The participant can then participate in the study by pressing the START
-        button and interacting with the controls on screen. The participant's
-        inputs are captured along with the timestamps at which the inputs
-        occurred, and once they are done they can anonymously submit their
-        participation data. This data can then be viewed and downloaded by the
-        study creator on the corresponding study page.
+        button and interacting with the controls on screen. The
+        participant&apos;s inputs are captured along with the timestamps at
+        which the inputs occurred, and once they are done they can anonymously
+        submit their participation data. This data can then be viewed and
+        downloaded by the study creator on the corresponding study page.
         <br />
         <br />
         Note that studies you create are tied to your login email and are only
