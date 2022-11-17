@@ -23,7 +23,7 @@ export default function Navbar() {
             </Link>
             <Link href="/about" passHref>
               <Button color="inherit" startIcon={<InfoIcon />}>
-                About
+                About / Help
               </Button>
             </Link>
           </span>

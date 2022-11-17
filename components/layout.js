@@ -17,7 +17,7 @@ export default function Layout({ children }) {
         </main>
       ) : (
         <Container maxWidth="sm">
-          <Alert severity="warning">Please sign in to view this page.</Alert>
+          <Alert severity="info">Please sign in to view this page.</Alert>
         </Container>
       )}
     </>
